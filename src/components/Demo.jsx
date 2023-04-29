@@ -8,6 +8,17 @@ const Demo = () => {
         summary: "",
     });
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log('Submitted!');
+    };
+
+    const handleKeyDown = (e) => {
+        if(e.keyCode === 13){
+            handleSubmit(e);
+        }
+    }
+
     return (
         <>
             <section
@@ -18,9 +29,7 @@ const Demo = () => {
                 >
                     <form
                         className='relative flex justify-center items-center'
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                        }}
+                        onSubmit={handleSubmit}
                     >
                         <img
                             src={linkIcon}
@@ -32,8 +41,8 @@ const Demo = () => {
                             type='url'
                             placeholder='Paste the article link'
                             value={article.url}
-                            onChange={() => {}}
-                            onKeyDown={() => {}}
+                            onChange={(e) => setArticle({...article, url: e.target.value})}
+                            onKeyDown={handleKeyDown}
                             required
                             className='url_input peer'
                         />

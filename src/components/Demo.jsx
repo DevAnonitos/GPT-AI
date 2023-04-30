@@ -32,11 +32,13 @@ const Demo = () => {
             (item) => item.url === article.url,
         );
 
+        setIsLoading(true);
         if(existingArticle) return setArticle(existingArticle);
 
         const { data } = await getSummary({
             articleUrl: article.url,
         });
+        setIsLoading(false);
 
         if(data?.summary) {
             const newArticle = { ...article, summary: data.summary };
@@ -60,6 +62,11 @@ const Demo = () => {
         if(e.keyCode === 13){
             handleSubmit(e);
         }
+    }
+
+    const handleClearHistory = () => {
+        setAllArticles([]);
+        localStorage.removeItem("articles");
     }
 
     return (
@@ -107,6 +114,21 @@ const Demo = () => {
                         </button>
                     </form>
 
+                    <button
+                        className="bg-slate-400 flex
+                        items-center justify-center rounded-2xl py-1"
+                        onClick={handleClearHistory}
+                    >
+                        Clear History
+                    </button>
+
+                    {isLoading && (
+                        <div className="flex items-center justify-center mt-4">
+                            <div className="w-32 h-1 bg-gray-300 rounded-full">
+                                <div className="w-24 h-1 bg-blue-500 rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+                    )}
                     {/* Browser History */}
                     <div
                         className='flex flex-col gap-1
@@ -138,6 +160,59 @@ const Demo = () => {
                             </div>
                         ))}
                     </div>
+                </div>
+
+                {/* Display Result */}
+                <div
+                    className='my-10 max-w-full flex
+                    justify-center items-center'
+                >
+                    {isFetching ? (
+                        <img
+                            src={loader}
+                            alt='loader'
+                            className='w-20 h-20 object-contain'
+                        />
+                    ): error ? (
+                        <p
+                            className='font-inter font-bold
+                            text-black text-center'
+                        >
+                            Well, that wasn't supposed to happen...
+                            <br />
+                            <span
+                                className='font-satoshi font-bold text-gray-700'
+                            >
+                                {error?.data?.error}
+                            </span>
+                        </p>
+                    ) : (
+                        article.summary && (
+                            <div
+                                className='flex flex-col gap-3'
+                            >
+                                <h2
+                                    className='font-satoshi font-bold
+                                    text-gray-600 text-xl'
+                                >
+                                    Article
+                                    <span className='blue_gradient'>
+                                        Summary
+                                    </span>
+                                </h2>
+                                <div
+                                    className="summary_box"
+                                >
+                                    <p
+                                        className='font-inter font-medium
+                                        text-sm text-gray-700'
+                                    >
+                                        {article.summary}
+                                    </p>
+                                </div>
+                            </div>
+                        )
+                    )}
                 </div>
             </section>
         </>

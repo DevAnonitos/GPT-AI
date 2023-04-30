@@ -122,13 +122,6 @@ const Demo = () => {
                         Clear History
                     </button>
 
-                    {isLoading && (
-                        <div className="flex items-center justify-center mt-4">
-                            <div className="w-32 h-1 bg-gray-300 rounded-full">
-                                <div className="w-24 h-1 bg-blue-500 rounded-full animate-pulse"></div>
-                            </div>
-                        </div>
-                    )}
                     {/* Browser History */}
                     <div
                         className='flex flex-col gap-1
